@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>amigui</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h1>amigui</h1>
+    <div class="chat-box">
+      <div class="messages"></div>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+        <button id="send-button">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
+  <script>
+    $(document).ready(function () {
+      $('#send-button').click(function () {
+        var userMessage = $('#user-input').val();
+        // Aquí enviarías el mensaje al servidor usando AJAX
+        $.ajax({
+          type: 'POST',
+          url: '/chat', // Ajusta la URL a la ruta de tu Flask
+          data: JSON.stringify({ message: userMessage }),
+          contentType: 'application/json',
+          success: function (response) {
+            // Agregar la respuesta del chatbot a la sección de mensajes
+            $('.messages').append('<div class="bot-message">' + response.response + '</div>');
+            $('#user-input').val('');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
