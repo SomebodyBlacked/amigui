@@ -8,6 +8,13 @@ app = Flask(__name__)
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+gemini_chat = model.start_chat(
+    history=[
+        {"role": "user", "parts": "Hola. Tengamos una conversación como si fuésemos mejores amigos."},
+        {"role": "model", "parts": "Ok."},
+    ]
+)
+
 
 @app.route("/")
 def index():
@@ -17,7 +24,7 @@ def index():
 @app.route('/chat', methods=['POST'])
 def chat():
     user_message = request.json["message"]
-    response = model.generate_content(user_message)
+    response = gemini_chat.send_message(user_message)
     return jsonify({"response": response.text})
 
 
