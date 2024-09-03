@@ -13,32 +13,46 @@
     <h1>amigui</h1>
     <div class="chat-box">
       <div class="messages"></div>
-      <div class="input-area">
+      <form id="chat-form">
         <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
-        <button id="send-button">Enviar</button>
-      </div>
+        <button type="submit">Enviar</button>
+      </form>
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
   <script>
-    $(document).ready(function () {
-      $('#send-button').click(function () {
-        var userMessage = $('#user-input').val();
-        // Aquí enviarías el mensaje al servidor usando AJAX
-        $.ajax({
-          type: 'POST',
-          url: '/chat', // Ajusta la URL a la ruta de tu Flask
-          data: JSON.stringify({ message: userMessage }),
-          contentType: 'application/json',
-          success: function (response) {
-            // Agregar la respuesta del chatbot a la sección de mensajes
-            $('.messages').append('<div class="bot-message">' + response.response + '</div>');
-            $('#user-input').val('');
-          }
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const messages = document.querySelector('.messages');
+
+    chatForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const userMessage = userInput.value;
+      userInput.value = '';
+
+      const userMessageElement = document.createElement('div');
+      userMessageElement.classList.add('user-message');
+      userMessageElement.textContent = userMessage;
+      messages.appendChild(userMessageElement);
+
+      fetch("/chat", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: userMessage })
+      })
+        .then(response => response.json())
+        .then(data => {
+          const botMessageElement = document.createElement('div');
+          botMessageElement.classList.add('bot-message');
+          botMessageElement.textContent = data.response;
+          messages.appendChild(botMessageElement);
+        })
+        .catch(error => {
+          console.error('Error:', error);
         });
-      });
     });
   </script>
 </body>
