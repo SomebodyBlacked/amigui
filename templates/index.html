@@ -24,6 +24,7 @@
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
     const messages = document.querySelector('.messages');
+    const chatBox = document.querySelector('.chat-box');
 
     chatForm.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -49,6 +50,7 @@
           botMessageElement.classList.add('bot-message');
           botMessageElement.textContent = data.response;
           messages.appendChild(botMessageElement);
+          chatBox.scrollTop = chatBox.scrollHeight;
         })
         .catch(error => {
           console.error('Error:', error);

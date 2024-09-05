@@ -24,8 +24,8 @@ body {
 .chat-box {
     height: 400px;
     width: 300px;
-    overflow-y: scroll;
-    border: 1px solid #ccc;
+    overflow-y: auto;
+    border: none;
     border-radius: 5px;
     padding: 10px;
 }
