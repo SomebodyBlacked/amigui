@@ -6,6 +6,10 @@ const chatBox = document.querySelector('.chat-box');
 chatForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
+    if (userInput.value.trim() === '') {
+        return;
+    }
+
     const userMessage = userInput.value;
     userInput.value = '';
 
